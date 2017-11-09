@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--定义别名-->
+    <typeAliases>
+        <!--
+           单个别名的定义 alias:别名 type:别名映射的类型
+           <typeAlias type="pojo.User" alias="user"/>
+           批量别名定义 指定包路径 自动扫描包下的pojo，定义别名，别名默认为类名（首字母小写或大写）
+        -->
+        <package name="pojo"/>
+    </typeAliases>
+
+    <!--加载mapper映射 如果和spring整合，可以使用整合包提供的mapper扫描器，此处的mappers就不用配置了-->
+    <mappers>
+        <!--<mapper resource="mapping/UserMapper.xml"></mapper>-->
+        <package name="mapping"></package>
+    </mappers>
+</configuration>
