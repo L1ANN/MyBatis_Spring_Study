@@ -95,16 +95,21 @@
     </bean>
 
     <!--定义统一异常处理器-->
-    <bean class=<!--拦截器-->
+    <bean class="exception.CustomExceptionResolver"></bean>
+
+    <!--配置RESTful中静态资源放行-->
+    <mvc:resources location="/js/" mapping="/js/**"/>
+
+    <!--拦截器-->
     <mvc:interceptors>
         <!--多个拦截器，顺序执行-->
         <!--<mvc:interceptor>-->
-        <!--<mvc:mapping path="/**"/>-->
-        <!--<bean class="controller.interceptor.HandlerInterceptor1"/>-->
+            <!--<mvc:mapping path="/**"/>-->
+            <!--<bean class="controller.interceptor.HandlerInterceptor1"/>-->
         <!--</mvc:interceptor>-->
         <!--<mvc:interceptor>-->
-        <!--<mvc:mapping path="/**"/>-->
-        <!--<bean class="controller.interceptor.HandlerInterceptor2"/>-->
+            <!--<mvc:mapping path="/**"/>-->
+            <!--<bean class="controller.interceptor.HandlerInterceptor2"/>-->
         <!--</mvc:interceptor>-->
 
         <mvc:interceptor>
@@ -113,8 +118,4 @@
             <bean class="controller.interceptor.LoginInterceptor"></bean>
         </mvc:interceptor>
     </mvc:interceptors>
-</beans>"exception.CustomExceptionResolver"></bean>
-
-    <!--配置RESTful中静态资源放行-->
-    <mvc:resources location="/js/" mapping="/js/**"/>
-
+</beans>
