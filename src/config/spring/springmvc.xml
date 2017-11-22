@@ -1,0 +1,120 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/mvc
+      http://www.springframework.org/schema/mvc/spring-mvc.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context.xsd
+      http://www.springframework.org/schema/aop
+      http://www.springframework.org/schema/aop/spring-aop.xsd
+      http://www.springframework.org/schema/tx
+      http://www.springframework.org/schema/tx/spring-tx.xsd ">
+
+    <!--注解处理器映射器-->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+
+    <!--注解的处理器适配器-->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="webBindingInitializer" ref="customBinder"/>
+        <!--加入json数据的消息转换器MappingJacksonHttpMessageConverter依赖jackson的两个jar包-->
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"></bean>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+    配置视图解析器
+    要求将jstl的包加到classpath
+    prefix：代表请求url的前缀
+    suffix：代表请求url的后缀
+    设置了这两个属性后我们在Controller中进行代码开发时返回的ModelAndView对象设置的页面路径值就不用带前缀名和后缀名了
+    -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+    <!--使用spring组件扫描，一次性配置此包下所有Handler-->
+    <context:component-scan base-package="controller"/>
+
+    <!--自定义webBinder-->
+    <bean id="customBinder" class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+        <!--注入转换器-->
+        <property name="conversionService" ref="conversionService"></property>
+        <!--注入校验器-->
+        <property name="validator" ref="validator"/>
+        <!--注入自定义属性编辑器-->
+        <!--<property name="propertyEditorRegistrars">-->
+            <!--<list>-->
+                <!--<ref bean="customPropertyEditor"/>-->
+            <!--</list>-->
+        <!--</property>-->
+    </bean>
+
+    <!--注册属性编辑器-->
+    <!--<bean id="customPropertyEditor" class="controller.propertyeditor.CustomPropertyEditor"/>-->
+
+    <!--转换器-->
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="converters">
+            <list>
+                <bean class="controller.converter.CustomDateConverter"/>
+                <bean class="controller.converter.StringTrimConverter"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+        <!--如果不指定则默认使用classpath下的ValidationMessages.properties-->
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
+
+    <!--校验错误信息配置文件-->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames" >
+            <list>
+                <value>classpath:CustomValidationMessages</value>
+            </list>
+        </property>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="cacheSeconds" value="120"/>
+    </bean>
+
+    <!--文件上传，CommonsMultipartResolver依赖我们传入的fileupload.jar包-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!--设置上传文件的最大尺寸为5MB-->
+        <property name="maxUploadSize">
+            <value>5242880</value>
+        </property>
+    </bean>
+
+    <!--定义统一异常处理器-->
+    <bean class=<!--拦截器-->
+    <mvc:interceptors>
+        <!--多个拦截器，顺序执行-->
+        <!--<mvc:interceptor>-->
+        <!--<mvc:mapping path="/**"/>-->
+        <!--<bean class="controller.interceptor.HandlerInterceptor1"/>-->
+        <!--</mvc:interceptor>-->
+        <!--<mvc:interceptor>-->
+        <!--<mvc:mapping path="/**"/>-->
+        <!--<bean class="controller.interceptor.HandlerInterceptor2"/>-->
+        <!--</mvc:interceptor>-->
+
+        <mvc:interceptor>
+            <!--/**可以拦截路径不管有多少层-->
+            <mvc:mapping path="/**"/>
+            <bean class="controller.interceptor.LoginInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+</beans>"exception.CustomExceptionResolver"></bean>
+
+    <!--配置RESTful中静态资源放行-->
+    <mvc:resources location="/js/" mapping="/js/**"/>
+

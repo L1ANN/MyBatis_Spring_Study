@@ -1,55 +1,55 @@
 package pojo;
 
-/**
- * @Author:L1ANN
- * @Description:
- * @Date:Created in 16:13 2017/11/9
- * @Modified By:
- */
+import java.util.Date;
+
 public class User {
-    private int id;
-    private String name;
-    private int age;
+    private Integer id;
 
-    public User(){
-    }
+    private String username;
 
-    public User(int id, String name, int age) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-    }
+    private Date birthday;
 
-    public int getId() {
+    private String sex;
+
+    private String address;
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username == null ? null : username.trim();
     }
 
-    public int getAge() {
-        return age;
+    public Date getBirthday() {
+        return birthday;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                '}';
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex == null ? null : sex.trim();
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
     }
 }
